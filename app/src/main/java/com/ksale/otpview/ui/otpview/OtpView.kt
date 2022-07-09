@@ -90,10 +90,8 @@ fun OtpView(
         errorColor = errorColor,
         onValueChange = { value ->
             text = value
-            isError = if (text.length == numberOfFields) {
-                text != "123456"
-            } else {
-                false
+            if (value.length == otpLength) {
+                onFilled(value)
             }
         },
         onFocusChanged = {
