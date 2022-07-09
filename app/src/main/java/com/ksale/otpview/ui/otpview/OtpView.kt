@@ -27,6 +27,24 @@ import com.ksale.otpview.ui.otpview.shapeoptions.PinShape
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * OtpView is a composable function which is exposed to usage by external classes.
+ * It will internally call private OtpView to draw the view
+ *
+ * @param modifier: Modifier that can be passed for configuration
+ * @param numberOfFields: Number of pins to be needed in the otp
+ * @param singlePinWidth: width of single pin
+ * @param isCursorEnabled: Is cursor needed to be displayed
+ * @param defaultColor: Default color for the pin shape, when the pin is not focused
+ * or filled.
+ * @param filledColor: Color for shape outline when it is filled with digit.
+ * @param cursorColor: Color of the cursor
+ * @param errorColor: Color for the pin outline when the otp entered is incorrect
+ * @param drawStyle: [DrawStyle] for the shape
+ * @param shape: It is custom shapes created for the pins [PinShape]
+ * @param textStyle: Style to be applied on text
+ * @param onFilled: Lambda when the otp is filled with the given length.
+ */
 @ExperimentalComposeUiApi
 @Composable
 fun OtpView(
@@ -90,6 +108,19 @@ fun OtpView(
     )
 }
 
+/**
+ * Internal composable to draw the view.
+ *
+ * @param text: Text of the otp For eg: "123", "123456"
+ * @param isError: Boolean which tells whether the otp entered is incorrect
+ * @param isFocus: Whether the otp is currently focused
+ * @param isCursorEnabled: To show the cursor or not
+ * @param focusRequester: [FocusRequester] to control the focus of the TextField
+ * @param onFocusChanged: Called when the focus of the TextField is changed
+ * @param onClick: Called when otp view is clicked
+ * @param onValueChange: Lambda for passing the value changes in the OTP
+ *
+ */
 @ExperimentalComposeUiApi
 @Composable
 private fun OtpView(
@@ -166,6 +197,15 @@ private fun OtpView(
     }
 }
 
+/**
+ * It is composable for displaying an individual pin of the OtpView
+ *
+ * @param modifier: Modifier for the Pin
+ * @param width: Width of the pin
+ * @param index: index of the pin
+ * @param digit: Digit in the particular pin
+ * @param textStyle: Style to be applied on the digit
+ */
 @Composable
 fun PinField(
     modifier: Modifier = Modifier,
