@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import com.ksale.otpview.ui.otpview.shapeoptions.PinShape
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -146,7 +147,7 @@ private fun OtpView(
         TextField(
             value = text,
             onValueChange = {
-                if (it.length <= numberOfFields) {
+                if (it.length <= numberOfFields && it.isDigitsOnly()) {
                     onValueChange(it)
                 }
             },
