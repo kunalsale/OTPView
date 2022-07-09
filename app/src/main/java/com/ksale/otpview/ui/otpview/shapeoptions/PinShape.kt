@@ -6,10 +6,19 @@ import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
 
+/**
+ * It is an interface for creating custom Paths for the shape to be drawn on Pin
+ */
 sealed interface PinShape {
 
+    // Draw method to be implemented by different Shapes
     fun drawShape(size: Size): Path
 
+    /**
+     * Underline shape _ _ _ _
+     *
+     * @param strokeWidth: width of the underline
+     */
     class LineShape(private val strokeWidth: Float): PinShape {
         override fun drawShape(size: Size): Path {
             return Path().apply {
@@ -20,7 +29,12 @@ sealed interface PinShape {
         }
     }
 
-    class RoundRectShape(private val cornerRadius: Float): PinShape {
+    /**
+     * Rectangular shape
+     *
+     * @param cornerRadius: If greater than zero than rounded rect will be shown
+     */
+    class RectangularShape(private val cornerRadius: Float): PinShape {
         override fun drawShape(size: Size): Path {
             return Path().apply {
                 reset()
@@ -31,6 +45,10 @@ sealed interface PinShape {
         }
     }
 
+    /**
+     * Circle shape pin
+     *
+     */
     object CircleShape : PinShape {
         override fun drawShape(size: Size): Path {
             return Path().apply {
