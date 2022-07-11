@@ -223,14 +223,13 @@ fun PinField(
     drawStyle: DrawStyle,
     onClick: (index: Int) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    val (cursorSymbol, setCursorSymbol) = remember { mutableStateOf("") }
+    var cursorSymbol by remember { mutableStateOf("") }
 
-    if (isFocus && isCurrentPinFocused && !isFilled) {
+    if (isCursorEnabled && isFocus && isCurrentPinFocused && !isFilled) {
         LaunchedEffect(key1 = cursorSymbol, true) {
-            scope.launch {
+            launch {
                 delay(500)
-                setCursorSymbol(if (cursorSymbol.isEmpty()) "|" else "")
+                cursorSymbol = if (cursorSymbol.isEmpty()) "|" else ""
             }
         }
     }
