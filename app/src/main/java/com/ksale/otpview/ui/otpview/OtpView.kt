@@ -159,9 +159,6 @@ private fun OtpView(
                 },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
-            ),
-            keyboardActions = KeyboardActions(
-
             )
         )
         Row(
