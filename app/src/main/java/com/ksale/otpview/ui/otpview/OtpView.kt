@@ -2,7 +2,6 @@ package com.ksale.otpview.ui.otpview
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -33,23 +32,28 @@ import kotlinx.coroutines.launch
  * It will internally call private OtpView to draw the view
  *
  * @param modifier: Modifier that can be passed for configuration
+ * @param otpStr: OTP text to be set on the view
  * @param numberOfFields: Number of pins to be needed in the otp
  * @param singlePinWidth: width of single pin
+ * @param pinHeight: Height of otp view
  * @param isCursorEnabled: Is cursor needed to be displayed
  * @param defaultColor: Default color for the pin shape, when the pin is not focused
  * or filled.
+ * @param focusColor: Color for shape outline when it is focused and not filled.
  * @param filledColor: Color for shape outline when it is filled with digit.
  * @param cursorColor: Color of the cursor
  * @param errorColor: Color for the pin outline when the otp entered is incorrect
+ * @param isError: Boolean is true if the entered otp is incorrect
  * @param drawStyle: [DrawStyle] for the shape
  * @param shape: It is custom shapes created for the pins [PinShape]
  * @param textStyle: Style to be applied on text
- * @param onFilled: Lambda when the otp is filled with the given length.
+ * @param onValueChange: Lambda to send changes in the text.
  */
 @ExperimentalComposeUiApi
 @Composable
 fun OtpView(
     modifier: Modifier = Modifier,
+    otpStr: String = "",
     numberOfFields: Int = 6,
     singlePinWidth: Dp = 50.dp,
     pinHeight: Dp = 50.dp,
@@ -59,17 +63,15 @@ fun OtpView(
     filledColor: Color = Color.Yellow,
     cursorColor: Color = Color.Yellow,
     errorColor: Color = Color.Red,
+    isError: Boolean = false,
     drawStyle: DrawStyle = Stroke(width = 10f),
     shape: PinShape = PinShape.LineShape(10f),
     textStyle: androidx.compose.ui.text.TextStyle = androidx.compose.ui.text.TextStyle(
         color = Color.Black,
         fontSize = 18.sp,
     ),
-    onFilled: (otp: String) -> Unit,
+    onValueChange: (String) -> Unit,
 ) {
-    var text by remember { mutableStateOf("") }
-    val otpLength = remember { numberOfFields }
-    var isError by remember { mutableStateOf(false) }
     var isFocus by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
@@ -77,7 +79,7 @@ fun OtpView(
     OtpView(
         modifier = modifier.height(height = pinHeight),
         singlePinWidth = singlePinWidth,
-        text = text,
+        text = otpStr,
         textStyle = textStyle,
         shape = shape,
         isFocus = isFocus,
@@ -90,9 +92,8 @@ fun OtpView(
         cursorColor = cursorColor,
         errorColor = errorColor,
         onValueChange = { value ->
-            text = value
-            if (value.length == otpLength) {
-                onFilled(value)
+            if (value.length <= numberOfFields) {
+                onValueChange(value)
             }
         },
         onFocusChanged = {
@@ -102,7 +103,7 @@ fun OtpView(
             focusRequester.requestFocus()
             keyboard?.show()
         },
-        numberOfFields = otpLength,
+        numberOfFields = numberOfFields,
         focusRequester = focusRequester
     )
 }
@@ -252,7 +253,7 @@ fun PinField(
         if (isCursorEnabled && digit == ""  && (isFocus && isCurrentPinFocused && !isFilled)) {
             Text(
                 text = cursorSymbol,
-                color = cursorColor,
+                color = if (isError) errorColor else cursorColor,
                 style = textStyle,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
