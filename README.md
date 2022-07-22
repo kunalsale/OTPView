@@ -35,6 +35,52 @@ fun CircleOtpView() {
     }
 }
 ```
+## PinShape
+
+Different shapes can be created using ```PinShape```, which is an interface and contains only one method ```drawShape(size: Size): Path```. Implementor class has to implement this method and return a Path which needs to be drawn with the given size in the method param.
+
+```
+class LineShape(private val strokeWidth: Float): PinShape {
+      override fun drawShape(size: Size): Path {
+         return Path().apply {
+             reset()
+             addRect(Rect(0f, size.height - (strokeWidth / 2), size.width, size.height))
+             close()
+         }
+      }
+}
+```
+
+PinShape is passed as a parameter in the OtpView composable and it is used in the ```PinField``` Modifier's ```drawBehind {}```.
+
+```
+@Composable
+fun PinField(
+    modifier = Modifier,
+    shape: PinShape,
+    .
+    .
+    .
+) {
+    Box(
+        modifier = modifier
+            .width(width)
+            .fillMaxHeight()
+            .drawBehind {
+                drawPath(
+                    path = shape.drawShape(this.size),
+                    .
+                    .
+                )
+            }
+            .clickable {
+                onClick(index)
+            },
+    ) {
+        ....
+    }
+}
+```
 
 ## Courtesy:
 
