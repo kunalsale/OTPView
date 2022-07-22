@@ -4,6 +4,8 @@ OTPView is a highly costumizable OTP view made in the Jetpack compose UI.
 <img src=https://user-images.githubusercontent.com/31345204/179820889-fa3264fe-8a40-44aa-bea0-34c953ef1f10.png width=200>   <img src=https://user-images.githubusercontent.com/31345204/179821505-ae97e4a7-8369-49ea-b2f1-db59ae79150e.png width=200> 
 
 #### Usage:
+CircleOtpView is a sample composable which calls the ```OtpView``` which actually draws the view.
+
 ```
 @Composable
 fun CircleOtpView() {
